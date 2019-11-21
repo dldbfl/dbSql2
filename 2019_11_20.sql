@@ -39,7 +39,7 @@ FROM users;
 -- 숫자에 대한 연산 (+.-,/,*)
 -- 문자에 대한 연산 (+가 존재 하지 않음 ,== ||)
 SELECT (10-5)*2, 'DB SQL 수업',
-        /*userid + '_modified', 문자열 연산은 더하기 연산이 없다*/
+        /*userid + '_modified', 문자열 연산은 더하기 (+)연산이 없다 ||를 사용합시다 ㅇㅋ?*/
         usernm || '_modified', reg_dt
 FROM users;
 
@@ -185,3 +185,4 @@ SELECT ename, hiredate
 FROM emp
 WHERE hiredate >= TO_DATE('19820101','yyyymmdd') 
 AND   hiredate <= TO_DATE('19830101','yyyymmdd');
+
