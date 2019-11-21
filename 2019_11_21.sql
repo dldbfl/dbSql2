@@ -108,4 +108,4 @@ WHERE mgr NOT IN (7698,7839) OR mgr IS NULL ; --NULL 값이 포함되어있으면 IS NOT 
 -- emp 테이블에서 job이 SLAESMAN이고 입사일자가 1981년 6월 1일 이후인 직원의 정보를 다음과 같이 조회하세요.
 SELECT *
 FROM emp
-WHERE job IN 'SALESMAN' AND HIREDATE > to_date('19810601','yyyymmdd');
+WHERE job IN 'SALESMAN' AND HIREDATE > to_date('19810601','yyyymmdd');      
