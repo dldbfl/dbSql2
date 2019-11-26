@@ -256,10 +256,6 @@ WHERE rn BETWEEN 11 AND 20;
 --row_3
 --emp ㅌ네이블에서 ename으로 정렬한 결과에 11번째 행과 14번째 행만 조회하는 쿼리를 작성해보세요
 
-SELECT empno, ename
-                FROM emp
-                ORDER BY ename;
-
 SELECT b.*
 FROM(SELECT ROWNUM rn, a.*
         FROM (SELECT empno, ename
