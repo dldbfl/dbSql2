@@ -143,12 +143,12 @@ SELECT empno, ename, mgr, nvl(mgr,9999) mgr_N, nvl2(mgr,mgr,9999) mgr_N_2, COALE
 FROM emp;
 
 --Fuction null 실습 fn5
-------------------------------------------수정해라!---------------------------------------------------
-SELECT userid, usernm, REG_DT, nvl(reg_dt,(TO_CHAR(sysdate),('rr/mm/dd'))) N_REG_DT
+
+SELECT userid, usernm, REG_DT, nvl(reg_dt,(TO_CHAR(sysdate,'yy/mm/dd'))) N_REG_DT
 FROM users
 WHERE userid NOT IN 'brown';
---넌 고칠 필요가 있어!
-------------------------------------------수정해라!---------------------------------------------------
+--잘했어 넌 할수있써
+
 
 --condition
 --case
@@ -183,4 +183,10 @@ SELECT empno, ename, job, sal,
                     'MANAGER',sal*1.10,
                     'PRESIDENT',sal*1.20,
                                sal ) bonus
-FROM emp;                    
+FROM emp;               
+
+
+
+
+
+
