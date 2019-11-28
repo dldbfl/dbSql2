@@ -1,7 +1,7 @@
 
 --CON1
 --CASE
--- WHEN condition THEN return1
+--WHEN condition THEN return1
 --END
 --DECODE(col|expr, search1, return1, search2, return2....default)
 SELECT empno, ename, job, sal,
@@ -31,12 +31,6 @@ FROM emp;
 
 
 
-----------이렇게 하면 틀려요-----------
-SELECT empno, ename, TO_CHAR(hiredate,'RR/MM/DD') hiredate,
-                                                    DECODE(hiredate, MOD(TO_NUMBER(TO_CHAR(hiredate,'yy')),2)=0 ,'건강검진 비대상자',
-                                                                    '건강검진 대상자') CONTACT_TO_DOCTOR                                                       
-FROM emp;
-----------이렇게 하면 틀려요--------------
 
 
 
@@ -75,8 +69,6 @@ SELECT MOD(TO_NUMBER(TO_CHAR(hiredate,'yy')),2)
 
 FROM EMP;
 
-
-
 --CON1
 --CASE
 -- WHEN condition THEN return1
@@ -100,7 +92,7 @@ SELECT empno, ename,
 FROM emp;           
 
 
---2. 내년도 건강검진 대상자를 조회하는 쿼리ㅏ
+--2. 내년도 건강검진 대상자를 조회하는 쿼리
 --2020년도
 
 SELECT empno, ename,
