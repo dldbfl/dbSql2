@@ -70,4 +70,7 @@ ORDER BY CNT;
 select product.pid, pnm, sum(cnt) cnt
 FROM product, cycle 
 WHERE cycle.pid = product.PID 
-GROUP BY product.pid, pnm; --cnt 까지 같아야 하나의 행으로 두겠습니다.
+GROUP BY product.pid, pnm; --product.pid, pnm 세 개가 같으면 하나의 행으로 두겠습니다.
+
+
+--
