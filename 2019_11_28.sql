@@ -193,3 +193,32 @@ SELECT LPROD_GU, LPROD_NM, PROD_ID, PROD_NAME
 FROM prod, lprod
 WHERE PROD_LGU = LPROD_GU
 ORDER BY prod_id;
+
+--실습 join2
+SELECT *
+FROM PROD;
+SELECT *
+FROM buyer;
+
+
+
+SELECT buyer_id, buyer_name, prod_id ,prod_name
+FROM buyer, prod
+WHERE PROD_BUYER = BUYER_ID
+ORDER BY prod_id;
+
+
+--실습 3
+SELECT    *
+FROM cart;
+SELECT    *
+FROM prod;
+
+SELECT mem_id, mem_name, prod_id, prod_name, cart_qty
+FROM cart, member, prod
+WHERE mem_id = cart_member AND prod_id = cart_prod
+ORDER BY mem_id;
+
+SELECT mem_id, mem_name, prod_id, prod_name, cart_qty
+FROM cart JOIN member ON mem_id = cart_member JOIN prod ON prod_id = cart_prod; 
+  
