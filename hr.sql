@@ -1,14 +1,15 @@
 --join8 
-
 select * FROM countries;
 select * From regions;
 
 SELECT regions.region_id, region_name, country_name
-FROM regions, countries
+FROM regions, countries 
 WHERE regions.region_id = countries.region_id 
 AND region_name IN ('Europe');
     
---join9
+--join9 
+--8번과 비교해서 France, Denmark, Belgium 3개 국가에 속하는 locations 정보가 미존재
+--나머지 5개중에 다수의 locations 정보를 갖고있는 국가가 존재해오..
 select * from locations;
 
 SELECT regions.region_id, region_name, country_name, city
