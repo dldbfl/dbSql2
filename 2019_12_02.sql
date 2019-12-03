@@ -119,7 +119,7 @@ SELECT * FROM customer;
 
 SELECT cycle.PID, PNM, customer.CID, customer.cnm,day, cnt
 FROM cycle, product, customer
-WHERE cycle.pid= product.pid 
-AND customer.cid = 1
-AND cycle.cid  = customer.cid ;
+WHERE cycle.pid  (+)= product.pid
+AND customer.cid (+) = 1
+AND cycle.cid (+) = customer.cid ;
 ORDER BY cycle.pid DESC;

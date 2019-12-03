@@ -204,6 +204,7 @@ GROUP BY deptno;
 --emp 테이블에서 comm컬럼이 null이 아닌 데이터는 4건이 존재, 9건은 null
 
 SELECT count(comm) count_comm, --null이 아닌 값으 개수 4
+       count(*),
        sum(comm) sum_comm,  --null 값을 제외, 300+500+1400+0= 2200
        sum(sal) sum_sal,
        sum(sal+ comm) tot_sal_sum,
