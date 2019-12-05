@@ -131,7 +131,6 @@ FROM emp;
 
 
 --서브쿼리 실습 sub1
-
 SELECT COUNT(*) cnt
 FROM emp
 WHERE SAL >(SELECT AVG(sal)
@@ -139,14 +138,11 @@ WHERE SAL >(SELECT AVG(sal)
 
 
 --서브쿼리 실습 sub2
-
-
 SELECT *
 FROM emp
 WHERE SAL >(SELECT AVG(sal)
             FROM emp);
             
-
 SELECT *
 FROM emp
 WHERE deptno IN (SELECT deptno
@@ -157,8 +153,8 @@ WHERE deptno IN (SELECT deptno
 SELECT *
 FROM emp
 WHERE sal <ANY (SELECT sal
-                   FROM emp
-                   WHERE ename in('SMITH','WARD'));
+                FROM emp
+                WHERE ename in('SMITH','WARD'));
                    
                    
                    
@@ -166,16 +162,16 @@ WHERE sal <ANY (SELECT sal
 --NOT IN 연산자 사용시오류
 SELECT *
 FROM emp -- 사원 정보 조회 --> 관리자 역할을 하지않는
-    WHERE empno NOT IN (SELECT NVL(mgr,-1)
-                         FROM emp);
+WHERE empno NOT IN (SELECT NVL(mgr,-1)
+                    FROM emp);
                          
                          
                          
 SELECT *
 FROM emp -- 사원 정보 조회 --> 관리자 역할을 하지않는
-    WHERE empno NOT IN (SELECT mgr
-                         FROM emp
-                         WHERE mgr IS NOT null);
+WHERE empno NOT IN (SELECT mgr
+                    FROM emp
+                    WHERE mgr IS NOT null);
                          
 
 
@@ -189,13 +185,13 @@ WHERE mgr IN (SELECT mgr
               FROM emp
               WHERE empno IN (7499,7782))
 AND deptno IN (SELECT deptno
-               FROM emp
-               WHERE empno IN (7499,7782));
+              FROM emp
+              WHERE empno IN (7499,7782));
                
                
 --비상호연관 서브쿼리
---메인퀘리의 컬럼을 서브쿼리에서 사용하지 않는  형태의 서브쿼리
---비상호 연관 서브쿼리의 경우 메이누커리에서 사용하는 테이블 , 서브쿼리 조회 순서를 
+--메인쿼리의 컬럼을 서브쿼리에서 사용하지 않는  형태의 서브쿼리
+--비상호 연관 서브쿼리의 경우 메인쿼리에서 사용하는 테이블 , 서브쿼리 조회 순서를 
 --성능적으로 유리한 쪽으로 판단하여 순서를 결정한다.
 --메인쿼리의 emp 테이블을 먼저읽을 수 있고, 서브쿼리의 emp 테이블을 
 --먼저 읽을 수 있다.
@@ -212,6 +208,8 @@ sELECT *
 FROM emp
 WHERE sal > (SELECT AVG(sal)
              FROM emp);
+            
+            
              
 --상호연관 서브쿼리 
 --해당직원이 속한 부서의 평균급여보다 높은 급여를 받는 직원 조회
