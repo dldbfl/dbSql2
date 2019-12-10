@@ -206,3 +206,70 @@ DROP TABLE emp_test;
 CREATE TABLE emp_test As 
 SELECT *
 FROM emp;
+
+--emp_test 테이블에는 인덱스가 없는 상태
+--원하는 데이터를 찾기 위해서는 테이블의 데이터를 모두 읽어와야한다.
+EXPLAIN PLAN FOR
+SELECT *
+FROM emp_test
+WHERE empno = 7369;
+
+SELECT *
+FROM table(dbms_xplan.display);
+
+--실행계획을 통해 7369 사번을 갖는 직원정보를 조회하기위해
+--테이블의 모든 데이터(14)를 읽어 본 다음에 사번이 7369인 데이터를 선택하여
+--사용자에게 반환
+--**13건의 데이터는 불필요하게 조회 후 버림
+Plan hash value: 3124080142
+ 
+------------------------------------------------------------------------------
+| Id  | Operation         | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |          |     1 |    87 |     3   (0)| 00:00:01 |
+|*  1 |  TABLE ACCESS FULL| EMP_TEST |     1 |    87 |     3   (0)| 00:00:01 |
+------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - filter("EMPNO"=7369)
+ 
+Note
+-----
+   - dynamic sampling used for this statement (level=2)
+
+
+
+
+
+
+EXPLAIN PLAN FOR
+SELECT *
+FROM emp
+WHERE empno = 7369;
+
+SELECT *
+FROM table(dbms_xplan.display);
+Plan hash value: 2949544139
+ 
+--------------------------------------------------------------------------------------
+| Id  | Operation                   | Name   | Rows  | Bytes | Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT            |        |     1 |    37 |     1   (0)| 00:00:01 |
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMP    |     1 |    37 |     1   (0)| 00:00:01 |
+|*  2 |   INDEX UNIQUE SCAN         | PK_EMP |     1 |       |     0   (0)| 00:00:01 |
+--------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("EMPNO"=7369)
+   
+   --실행계획을 통해 분석을 하면
+    --empno가 7369인 직원을 index를 통해 매우 빠르게 인덱스에 접근
+    --같이 저장되어 있는 rowid값을 통해 table에 적용한다.
+    --table에서 읽은 데이터는 7369사번 데이터 한건만 조회를 하고
+    --나머지 13건에서 대해서는 읽지않고 처리
+    --14->1
+    --1-->1
