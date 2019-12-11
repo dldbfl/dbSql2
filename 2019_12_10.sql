@@ -273,3 +273,7 @@ Predicate Information (identified by operation id):
     --나머지 13건에서 대해서는 읽지않고 처리
     --14->1
     --1-->1
+    
+    
+    
+SELECT rowid FROM emp;
