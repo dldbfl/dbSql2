@@ -140,6 +140,7 @@ CREATE UNIQUE INDEX idx_n_dept_01 ON dept_test (deptno);
 CREATE INDEX idx_n_dept_02 ON dept_test (dname);
 CREATE INDEX idx_n_dept_03 ON dept_test (deptno,dname);
 
+
 --idx2
 
 DROP INDEX idx_n_dept_03;
