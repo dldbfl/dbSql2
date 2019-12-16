@@ -42,7 +42,7 @@ CREATE TABLE departments (
     department_name VARCHAR(30) NOT NULL,
     manager_id NUMBER(6),
     location_id NUMBER(4),
-    CONSTRAINT DEPT_MGR_FK FOREIGN KEY (manager_id) REFERENCES employees (employee_id),
+--    CONSTRAINT DEPT_MGR_FK FOREIGN KEY (manager_id) REFERENCES employees (employee_id), 이친구는 알터로
     CONSTRAINT DEPT_LOC_FK FOREIGN KEY (location_id) REFERENCES locations (location_id)
     
     );
@@ -61,7 +61,7 @@ CREATE TABLE employees (
     department_id NUMBER(4),
     CONSTRAINT EMP_JOB_FK FOREIGN KEY (job_id) REFERENCES jobs (job_id),
     CONSTRAINT EMP_MANAGER_FK FOREIGN KEY (manager_id) REFERENCES employees (employee_id),
-    CONSTRAINT DEPT_MGR_FK FOREIGN KEY (department_id) REFERENCES departments (department_id)
+    CONSTRAINT EMP_DEPT_FK FOREIGN KEY (department_id) REFERENCES departments (department_id)
     );
          
 CREATE TABLE job_history (
@@ -77,7 +77,15 @@ CREATE TABLE job_history (
     );
     
     
-    
-    
+
+ALTER TABLE departments ADD CONSTRAINT DEPT_MGR_FK
+                                        FOREIGN KEY(manager_id) REFERENCES employees(employee_id);    
+
+
+
+select *
+from user_constraints
+where table_name IN ('LOCATIONS', 'JOB_HISTORY', 'JOBS', 'COUNTRIES', 'REGIONS', 'DEPARTMENTS', 'EMPLOYEES')
+and constraint_type in ('P','R');
     
     

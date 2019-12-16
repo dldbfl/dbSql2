@@ -433,6 +433,10 @@ ALTER TABLE emp_test DROP COLUMN hp_n;
 ALTER TABLE emp_test ADD CONSTRAINT pk_emp_test
                                         PRIMARY KEy(empno);
                                         
+--제약 조건 추가
+ALTER TABLE emp_test ADD CONSTRAINT fk_emp_to_dept
+                                        FOREIGN KEY(deptno) REFERENCES dept(deptno);
+                                        
 --제약 조건 삭제
 --ALTER TABLE테이블명 DROP CONSTRAINT  제약조건 이름;
 --emp_test 테이블의 FRIMARY KEY 제약조건은 pk_emp_test 제약 삭제
