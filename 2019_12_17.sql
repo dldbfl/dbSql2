@@ -183,59 +183,46 @@ CONNECT BY PRIOR deptcd = p_deptcd
 --복습 calendar2 해당월의 모든 주차에 대해 날짜를 같이 출력하도록 쿼리를 작성해보세요.
 
 
+SELECT  MAX(NVL(DECODE(d, 1, dt),dt-d+1)) sUn, MAX(NVL(DECODE(d, 2, dt),dt-d+2))mon, MAX(NVL(DECODE(d, 3, dt),dt-d+3))tue,
+        MAX(NVL(DECODE(d, 4, dt),dt-d+4)) wen, MAX(NVL(DECODE(d, 5, dt),dt-d+5))thu, MAX(NVL(DECODE(d, 6, dt),dt-d+6))fri,
+        MAX(NVL(DECODE(d, 7, dt),dt-d+7))sat
+FROM
+    (SELECT ROWNUM rn,
+            TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)dt ,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1),'D') d,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
+     FROM dual
+     CONNECT BY LEVEL <= TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'DD'))
+        
+GROUP BY dt-d-1
+ORDER BY sat;  
+
+---
+
+SELECT LDT-FDT+1
+FROM
+(SELECT TO_DATE(:yyyymm,'YYYYMM') dt,
+       LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM'))+7- TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'D') ldt,
+       TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1) fdt
+ FROM dual);
+ 
 SELECT  MAX(DECODE(d, 1, dt)) sUn, MAX(DECODE(d, 2, dt))mon, MAX(DECODE(d, 3, dt))tue,
         MAX(DECODE(d, 4, dt)) wen, MAX(DECODE(d, 5, dt))thu, MAX(DECODE(d, 6, dt))fri,
         MAX(DECODE(d, 7, dt))sat
 FROM
     (SELECT ROWNUM rn,
-            TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)dt ,
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1),'D') d,
-            TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'DD') dddd,
-            
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1),'dd'),
-            LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)- TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW'),'YYYY/MM/dd') dd,
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)- TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW'),'d') ddd,
+--            TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)dt , -- before
+            TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1) dt,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1),'D') d,
             TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
      FROM dual
-     CONNECT BY LEVEL <= TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'DD'))
-        
-GROUP BY dt-(d-1)
-ORDER BY sat;             
-
-
-SELECT TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1) dt,
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1),'D') d,
-            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
-     FROM dual
-     CONNECT BY LEVEL <= 35
-     
-     
---NULL처리방법 DATE     
-     SQL> SELECT CASE WHEN NVL(A,SYSDATE) > TO_DATE(B,'YYYYMMDD')
-  2  THEN 1 ELSE 0 END
-  3  FROM DATE_TEST;
-SELECT CASE WHEN NVL(A,SYSDATE) > TO_DATE(B,'YYYYMMDD')
-                 *
-ERROR at line 1:
-ORA-01861: literal does not match format string
-
-SQL> SELECT CASE WHEN TO_DATE(NVL(A, TO_CHAR(SYSDATE, 'YYYYMMDD')), 'YYYYMMDD') >
-  2  TO_DATE(B, 'YYYYMMDD') THEN 1 ELSE 0 END AS "DATE_TEST"
-  3  FROM DATE_TEST;
-
- DATE_TEST
-----------
-         0
-         1
-         1
-
-SQL> SELECT CASE WHEN NVL(TO_DATE(A, 'YYYYMMDD'), SYSDATE) >
-  2  TO_DATE(B, 'YYYYMMDD') THEN 1 ELSE 0 END AS "DATE_TEST"
-  3  FROM DATE_TEST;
-
- DATE_TEST
-----------
-         0
-         1
-         1
+     CONNECT BY LEVEL <= (SELECT LDT-FDT+1
+FROM
+(SELECT TO_DATE(:yyyymm,'YYYYMM') dt,
+        LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM'))+7- TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'D') ldt,
+        TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1) fdt
+        FROM dual)))        
+GROUP BY dt-d-1
+ORDER BY sat;  
+ 
+ 
