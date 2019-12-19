@@ -109,6 +109,26 @@ FROM
         
 GROUP BY dt-(d-1)
 ORDER BY sat; 
+-----
+SELECT  /*d, dt,*/ 
+        dt-(d-1),
+        MAX(DECODE(d, 1, dt)) sUn, MAX(DECODE(d, 2, dt))mon, MAX(DECODE(d, 3, dt))tue,
+        MAX(DECODE(d, 4, dt)) wen, MAX(DECODE(d, 5, dt))thu, MAX(DECODE(d, 6, dt))fri,
+        MAX(DECODE(d, 7, dt))sat
+FROM
+    (SELECT TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1) dt,
+            dt-d,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1),'D') d,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
+
+     FROM dual
+     CONNECT BY LEVEL <= TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'DD'))
+        
+GROUP BY dt-(d-1)
+ORDER BY sat; 
+
+
+
 
 ---
 
@@ -225,4 +245,44 @@ FROM
 GROUP BY dt-d-1
 ORDER BY sat;  
  
+ ------
+ 
+
+SELECT  MAX(DECODE(d, 1, dt)) sUn, MAX(DECODE(d, 2, dt))mon, MAX(DECODE(d, 3, dt))tue,
+        MAX(DECODE(d, 4, dt)) wen, MAX(DECODE(d, 5, dt))thu, MAX(DECODE(d, 6, dt))fri,
+        MAX(DECODE(d, 7, dt))sat
+FROM
+    (SELECT --TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)dt , -- before
+            LEVEL, TRUNC(LEVEL/8)m,
+            TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1) dt,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1),'D') d,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
+     FROM dual
+     CONNECT BY LEVEL <= (SELECT LDT-FDT+1
+                          FROM (SELECT TO_DATE(:yyyymm,'YYYYMM') dt,
+                                LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM'))+7- TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'D') ldt,
+                                TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1) fdt
+                                FROM dual)))        
+GROUP BY dt-d-1
+ORDER BY sat;  
+
+
+----
+SELECT  MAX(DECODE(d, 1, dt)) sUn, MAX(DECODE(d, 2, dt))mon, MAX(DECODE(d, 3, dt))tue,
+        MAX(DECODE(d, 4, dt)) wen, MAX(DECODE(d, 5, dt))thu, MAX(DECODE(d, 6, dt))fri,
+        MAX(DECODE(d, 7, dt))sat
+FROM
+    (SELECT --TO_DATE(:yyyymm,'YYYYMM')+(LEVEL-1)dt , -- before
+            LEVEL, TRUNC(LEVEL/8)m,
+            TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1) dt,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1)+(LEVEL-1),'D') d,
+            TO_CHAR(TO_DATE(:yyyymm,'YYYYMM')+(LEVEL),'IW') IW
+     FROM dual
+     CONNECT BY LEVEL <= (SELECT LDT-FDT+1
+                          FROM (SELECT TO_DATE(:yyyymm,'YYYYMM') dt,
+                                LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM'))+7- TO_CHAR(LAST_DAY(TO_DATE(:yyyymm, 'YYYYMM')),'D') ldt,
+                                TO_DATE(:yyyymm,'YYYYMM')-(TO_CHAR(TO_DATE(:yyyymm, 'YYYYMM'),'D')-1) fdt
+                                FROM dual)))        
+GROUP BY dt-d-1
+ORDER BY sat; 
  
