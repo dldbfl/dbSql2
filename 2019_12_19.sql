@@ -110,15 +110,44 @@ FROM emp;
 --실습 no_ana3
 a.rn >= b.rn
 
-SELECT a1.rownum
-FROM  (SELECT a.* ,rownum
-        FROM(   SELECT empno, ename, hiredate, sal
-                FROM emp
-                GrOUP BY empno, ename, hiredate, sal
-                ORDER BY sal,HIREDATE)a)a1,
-        (SELECT b.* ,rownum
-         FROM(   SELECT empno, ename, hiredate, sal
-                FROM emp
-                GrOUP BY empno, ename, hiredate, sal
-                ORDER BY sal,HIREDATE)b)a2
-WHERE a1.rownum >= a2.rownum;                
+select a.empno, a.ename, a.sal1,sum(sal2) as c_sum
+from
+    (select empno,ename,rownum as rn1, sal1
+     from (select empno, ename,sal as sal1
+           from emp
+           order by sal)) a,
+    (select rownum as rn2, sal as sal2
+     from (select sal
+           from emp
+           order by sal)) b
+where a.rn1 >= b.rn2
+group by a.empno, a.ename, a.sal1
+rder by c_sum;
+
+
+-- 사원번호, 사원이름, 부서번호, 급여, 부서원의 전체 급여합
+select empno, ename, deptno, sal,
+        Sum(sal) over(ORDER BY sal
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) c_sum1, -- 가장 첫 행부터 현재행까지
+        Sum(sal) over(ORDER BY sal
+        ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) c_sum2,  --바로 이전행부터 현재행까지 
+        Sum(sal) over(ORDER BY sal
+        ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) c_sum3,  --바로 이전행부터 현재행까지
+        Sum(sal) over(ORDER BY sal
+        ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING) c_sum4 -- 현재행부터 마지막행까지
+FROM emp
+;               
+
+--ana7 unbounded
+SELECT empno, ename, deptno, sal,
+       SUM(sal) over (PARTITION BY deptno ORDER BY sal, empno)c_sum
+FROM emp;       
+
+
+--ROWS vs RANGE 차이 확인하기
+SELECT empno, ename, deptno, sal,
+       sum(sal) OVER (ORDER BY sal ROWs UNBOUNDED PRECEDING) row_sum,
+       sum(sal) OVER (ORDER BY sal Range UNBOUNDED PRECEDING) range_sum,
+       sum(sal) OVER (ORDER BY sal ROWs UNBOUNDED FOLLOWING) rowfollow_sum,
+       sum(sal) OVER (ORDER BY sal) c_sum  --안썻으면 Range UNBOUNDED PRECEDING 디폴트다.ㄱ
+FROM emp;       
