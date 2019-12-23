@@ -102,3 +102,40 @@ END;
 /
 
 EXEC REGISTDEPT_TEST(91,'ddit','daejeon');
+
+
+CREATE OR REPLACE PROCEDURE registdept_test
+(param IN dept.deptno%TYPE, 
+param1 IN dept.dname%TYPE, 
+param2 IN dept.loc%TYPE)
+IS
+--deptno dept.deptno%TYPE;
+--dname dept.dname%TYPE;
+--loc dept.loc%TYPE;
+
+BEGIN
+    INSERT INTO dept_test VALUES (param, param1, param2);
+--    COMMIT;
+--    SELECT deptno, dname, loc
+--    INTO deptno, dname, loc
+--    FROM dept_test
+--    WHERE deptno = param
+--    AND dname = param1
+--    AND loc = param2;
+    
+--     DBMS_OUTPUT.PUT_LINE(deptno || ' ' || dname|| ' ' ||loc);
+     
+END;   
+/
+
+EXEC REGISTDEPT_TEST(99,'ddit','daejeon');
+
+ROLLBACK;
+
+
+-----------------------------------------
+
+SELECT *
+FROM dept_test;
+
+commit;
